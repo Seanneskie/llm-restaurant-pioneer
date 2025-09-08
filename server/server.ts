@@ -5,7 +5,6 @@ import { searchPlaces, getPlaceDetails } from "../fourspace/client.js";
 import { HttpError, toHttpJson } from "../utils/errors.js";
 import { logInfo } from "../utils/log.js";
 import { loadEnv } from "../utils/env.js";
-import "dotenv/config";
 
 const ENRICH_LIMIT = 12;
 
