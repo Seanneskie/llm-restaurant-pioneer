@@ -18,7 +18,7 @@ export async function searchPlaces(params: Record<string, string>) {
     
     Object.entries(params).forEach(([k, v]) => v != null && url.searchParams.set(k, String(v)))
     
-  const res = await fetch(url.toString(), { headers: authHeaders(), signal: (AbortSignal as any).timeout?.(10000) });
+    const res = await fetch(url.toString(), { headers: authHeaders(), signal: (AbortSignal as any).timeout?.(10000) });
     
     if (!res.ok) throw new Error(`FSQ search error: ${res.status} ${res.statusText}`);
 

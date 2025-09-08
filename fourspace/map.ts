@@ -60,6 +60,7 @@ export function toFsqParams(cmd: Command) {
 
   return params;
 }
+
 type AnyPlace = (PlaceLite | PlaceDetails) & {
   fsq_place_id?: string;
   latitude?: number;
@@ -69,8 +70,6 @@ type AnyPlace = (PlaceLite | PlaceDetails) & {
   social_media?: { facebook_id?: string; twitter?: string };
   placemaker_url?: string;
 };
-
-
 
 
 export function normalizePlace(place: AnyPlace) {

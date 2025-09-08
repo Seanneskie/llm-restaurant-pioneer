@@ -110,7 +110,7 @@ To match the requirement "the user must provide a `code` parameter `pioneerdevai
     - Code: `fourspace/client.ts` builds URLs via `URL`/`URLSearchParams` and sets required headers.
   - Outcome: Stable requests, predictable responses, easier typing.
 
-- Unable to use GPT for code generation
+- Unable to use GPT for command generation
   - Problem: Restrictions prevented using GPT for command extraction.
   - Solution: Switched to Google Gemini (`@google/genai`) with a response JSON schema and Zod validation.
     - Code: `llm/parser.ts` defines a JSON schema for the LLM, enforces `responseMimeType: application/json`, then parses and validates with `llm/schema.ts`.

@@ -37,6 +37,7 @@ app.get("/api/execute", async (c) => {
 
   const start = Date.now();
   logInfo({ path: "/api/execute", stage: "start", have_message: Boolean(message) });
+  
   const cmd = await parseToCommand(message);
   const fsqParams = toFsqParams(cmd);
   const search = await searchPlaces(fsqParams);
