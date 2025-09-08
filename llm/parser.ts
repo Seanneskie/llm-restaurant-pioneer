@@ -1,8 +1,16 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { CommandSchema, type Command } from "./schema.js";
 import { parse } from "path";
+import { loadEnv } from "../utils/env.js";
 
-const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});
+let ai: GoogleGenAI | null = null;
+function getAi(): GoogleGenAI {
+  if (!ai) {
+    const { GEMINI_API_KEY } = loadEnv();
+    ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+  }
+  return ai;
+}
 
 
 const CommandResponseSchema = {
@@ -46,7 +54,7 @@ const systemPrompt = [
 
 
 export async function parseToCommand(message: string): Promise<Command> {
-  const response = await ai.models.generateContent({
+  const response = await getAi().models.generateContent({
     model: "gemini-2.5-flash",
     contents: ` ${systemPrompt}
         User Message: ${message},

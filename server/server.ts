@@ -4,6 +4,7 @@ import { toFsqParams, normalizePlace } from "../fourspace/map.js";
 import { searchPlaces, getPlaceDetails } from "../fourspace/client.js";
 import { HttpError, toHttpJson } from "../utils/errors.js";
 import { logInfo } from "../utils/log.js";
+import { loadEnv } from "../utils/env.js";
 import "dotenv/config";
 
 const ENRICH_LIMIT = 12;
@@ -24,16 +25,19 @@ app.get("/", (c) =>
 );
 
 app.get("/api/execute", async (c) => {
+  // Validate env on each request to fail fast with a clear error
+  const { API_CODE } = loadEnv();
   const code = c.req.query("code");
   const message = c.req.query("message");
 
-  if (code !== process.env.API_CODE) {
+  if (code !== API_CODE) {
     throw new HttpError(401, "Unauthorized: invalid code");
   }
 
   if (!message) throw new HttpError(400, "Bad Request: message is required");
 
   const start = Date.now();
+  logInfo({ path: "/api/execute", stage: "start", have_message: Boolean(message) });
   const cmd = await parseToCommand(message);
   const fsqParams = toFsqParams(cmd);
   const search = await searchPlaces(fsqParams);
