@@ -67,6 +67,35 @@ Example workflow:
   - Start: `npm start` (reads `.env`; uses `PORT` or `3000`).
 
 
+## Deploying to Vercel
+Common causes of failed deployments and how to avoid them:
+- Wrong file placement: Vercel only detects API routes in `/api` at the project root.
+  - Ensure you have: `/api/execute.ts` and `/server/server.ts` at the repo root (as in this repo).
+  - If it’s under `/src/api/…`, Vercel won’t pick it up.
+- Compiled output mismatch: Vercel runs TypeScript with `@vercel/node` by default; you don’t need to ship `dist/` for API routes.
+  - Keep your source TypeScript files in `/api` rather than trying to route to built output.
+  - This repo’s `/api/execute.ts` is the entry for the function.
+- Missing `vercel.json`: Without it, Vercel may guess frameworks (e.g., Next.js) and look for `public/`.
+  - Add a basic `vercel.json` (example below) to set the runtime and include files.
+
+Minimal vercel.json for TypeScript APIs:
+```json
+{
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "nodejs22.x"
+    }
+  },
+  "ignoreCommand": "echo Using root api directory"
+}
+```
+
+Notes:
+- Set project env vars in Vercel Dashboard: `GEMINI_API_KEY`, `FSQ_API_KEY`, `API_CODE`.
+- If you restructure files, keep the serverless entry under `/api` and ensure it either exports `default app.fetch` (Hono) or a handler compatible with `@vercel/node`.
+- Avoid calling `serve(...)` inside serverless handlers; serverless expects a request handler export.
+
+
 ## Environment
 - `GEMINI_API_KEY`: Google Gemini API key for parsing.
 - `FSQ_API_KEY`: Foursquare Places v3 API key (Bearer token).
@@ -141,4 +170,3 @@ To match the requirement "the user must provide a `code` parameter `pioneerdevai
 
 ## License
 MIT (see `LICENSE` if present).
-
