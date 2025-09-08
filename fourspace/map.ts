@@ -1,4 +1,4 @@
-import type { Command } from "../llm/schema";
+import type { Command } from "../llm/schema.js";
 import type { PlaceDetails, PlaceLite, PlaceHours } from "./types";
 
 

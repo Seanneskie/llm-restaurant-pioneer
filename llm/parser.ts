@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { CommandSchema, type Command } from "./schema";
+import { CommandSchema, type Command } from "./schema.js";
 import { parse } from "path";
 
 const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});
