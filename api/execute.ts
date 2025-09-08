@@ -1,4 +1,4 @@
-import "../load_env";
+import "../load_env.js";
 import { serve } from "@hono/node-server";
 import app from "../server/server"; // Hono app
 
