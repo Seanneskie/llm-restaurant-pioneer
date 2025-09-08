@@ -1,5 +1,4 @@
-import { Env } from "hono";
-import {z} from "zod";
+import { z } from "zod";
 
 const envSchema = z.object({
   GEMINI_API_KEY: z.string().min(1, "GEMINI_API_KEY is required"),
@@ -8,12 +7,14 @@ const envSchema = z.object({
   API_CODE: z.string().min(1, "API_CODE is required"),
 });
 
-export const env = envSchema.parse(process.env);
+export type AppEnv = z.infer<typeof envSchema>;
 
-export function loadEnv() : Env {
-    const parsed = envSchema.safeParse(process.env);
-    if (!parsed.success) {
-        throw new Error(`Environment variable error: ${parsed.error.message}`);
-    }
-    return parsed.data;
+export const env: AppEnv = envSchema.parse(process.env);
+
+export function loadEnv(): AppEnv {
+  const parsed = envSchema.safeParse(process.env);
+  if (!parsed.success) {
+    throw new Error(`Environment variable error: ${parsed.error.message}`);
+  }
+  return parsed.data;
 }
