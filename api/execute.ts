@@ -1,6 +1,6 @@
 import "../load_env.js";
 import { serve } from "@hono/node-server";
-import app from "../server/server"; // Hono app
+import app from "../server/server.js"; // Hono app
 
 // Export default handler for Vercel (Node.js Runtime)
 export default app.fetch;
