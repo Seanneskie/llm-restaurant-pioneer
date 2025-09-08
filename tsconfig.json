@@ -14,5 +14,5 @@
     "types": ["node"],
     "outDir": "dist"
   },
-  "include": ["llm", "fourspace", "api", "server", "utils" ],
+  "include": ["llm", "fourspace", "api", "server", "utils", "load_env.ts"],
 }
