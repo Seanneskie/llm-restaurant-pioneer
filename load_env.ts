@@ -14,20 +14,26 @@ if (!isProd) {
   // Load .env from project root in dev (ts-node) and from ../ in dist
   const base = path.basename(__dirname) === "dist" ? path.dirname(__dirname) : __dirname;
   const root = path.resolve(base);
-  const envFile = process.env.ENV_FILE || ".env";
-  const envPath = path.join(root, envFile);
 
-  if (fs.existsSync(envPath)) {
+  let envPath: string | null = null;
+  if (process.env.ENV_FILE) {
+    const customPath = path.join(root, process.env.ENV_FILE);
+    envPath = fs.existsSync(customPath) ? customPath : null;
+    if (!envPath) {
+      console.warn(`[env] Missing ${customPath} (from ENV_FILE)`);
+    }
+  } else {
+    const localPath = path.join(root, ".env.local");
+    const defaultPath = path.join(root, ".env");
+    envPath = fs.existsSync(localPath) ? localPath : (fs.existsSync(defaultPath) ? defaultPath : null);
+  }
+
+  if (envPath) {
     const result = dotenv.config({ path: envPath });
     if (result.error) {
       console.warn(`[env] Could not load ${envPath}: ${result.error.message}`);
     } else {
       console.log(`[env] Loaded ${envPath}`);
-    }
-  } else {
-    // Silent when missing in dev unless explicitly set via ENV_FILE
-    if (process.env.ENV_FILE) {
-      console.warn(`[env] Missing ${envPath} (from ENV_FILE)`);
     }
   }
 }
