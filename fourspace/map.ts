@@ -40,7 +40,6 @@ export function toFsqParams(cmd: Command) {
     query: p.query,
     fsq_category_ids: '4d4b7105d754a06374d81259',
     limit: String(Math.min(p.limit ?? 20, 50)),
-    // fields: 'fsq_place_id,name,location,geocodes,rating,price,hours,website,categories,distance,link',
   };
 
   if (p.near) {
