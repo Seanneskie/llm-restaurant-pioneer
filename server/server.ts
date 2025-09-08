@@ -2,7 +2,7 @@ import { Hono} from "hono";
 import { parseToCommand } from "../llm/parser.js";
 import { toFsqParams, normalizePlace } from "../fourspace/map.js";
 import { searchPlaces, getPlaceDetails } from "../fourspace/client.js";
-import { HttpError } from "../utils/errors";
+import { HttpError, toHttpJson } from "../utils/errors";
 import { logInfo } from "../utils/log";
 import "dotenv/config";
 
@@ -10,8 +10,17 @@ const ENRICH_LIMIT = 12;
 
 const app = new Hono();
 
+// JSON-only error handling
+app.onError((err, c) => {
+  const { status, body } = toHttpJson(err);
+  return c.json(body, status);
+});
+
+// JSON-only 404
+app.notFound((c) => c.json({ error: "NotFound", message: "Route not found" }, 404));
+
 app.get("/", (c) =>
-  c.json({ ok: true, hint: "api/execute?message...&code=pioneerdevai" })
+  c.json({ ok: true, hint: "api/execute?message...&code=code" })
 );
 
 app.get("/api/execute", async (c) => {
@@ -30,7 +39,6 @@ app.get("/api/execute", async (c) => {
   const search = await searchPlaces(fsqParams);
 
   const top = (search.results ?? []).slice(0, ENRICH_LIMIT);
-  console.log(search.results);
   const detailed = await Promise.all(
     top.map(async (place) => {
       const id = (place as any).fsq_id ?? (place as any).fsq_place_id;
