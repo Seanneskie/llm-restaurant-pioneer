@@ -2,8 +2,8 @@ import { Hono} from "hono";
 import { parseToCommand } from "../llm/parser.js";
 import { toFsqParams, normalizePlace } from "../fourspace/map.js";
 import { searchPlaces, getPlaceDetails } from "../fourspace/client.js";
-import { HttpError, toHttpJson } from "../utils/errors";
-import { logInfo } from "../utils/log";
+import { HttpError, toHttpJson } from "../utils/errors.js";
+import { logInfo } from "../utils/log.js";
 import "dotenv/config";
 
 const ENRICH_LIMIT = 12;
